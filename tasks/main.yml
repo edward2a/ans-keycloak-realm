@@ -1,0 +1,9 @@
+---
+- ansible.builtin.include_tasks:
+    file: realm.yml
+
+- ansible.builtin.include_tasks:
+    file: manage_users.yml
+
+- ansible.builtin.include_tasks:
+    file: manage_clients.yml
