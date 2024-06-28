@@ -1,0 +1,97 @@
+---
+- name: Manage OpenID Clients
+  community.general.keycloak_client:
+    # Auth Params
+    auth_username: "{{ auth_username }}"
+    auth_password: "{{ auth_password }}"
+    auth_realm: "{{ auth_realm | default('master') }}"
+    auth_keycloak_url: "{{ auth_keycloak_url }}"
+    validate_certs: "{{ validate_certs }}"
+
+    # Client Params
+    client_id: "{{ item.client_id | default(item.name) }}"
+    client_template: "{{ item.client_template | default(omit) }}"
+    consent_required: "{{ item.consent_required | default(false) }}"
+    default_client_scopes: "{{ item.default_client_scopes | default(omit) }}"
+    default_roles: "{{ item.default_roles | default(omit) }}"
+    description: "{{ item.description | default(omit) }}"
+    frontchannel_logout: "{{ item.frontchannel_logout | default(false) }}"
+    full_scope_allowed: "{{ item.full_scope_allowed | default(false) }}"
+    enabled: "{{ item.enabled | default(true) }}"
+    name: "{{ item.name | default(item.client_id) }}"
+    optional_client_scopes: "{{ item.optional_client_scopes | default(omit) }}"
+    protocol: "{{ item.protocol }}"
+    protocol_mappers: "{{ item.procotol_mappers | default(omit) }}"
+    public_client: "{{ item.public_client | default(false) }}"
+    realm: "{{ realm }}"
+    redirect_uris: "{{ item.redirect_uris | default(omit) }}"
+    root_url: "{{ item.root_url | default(omit) }}"
+    surrogate_auth_required: "{{ item.surrogate_auth_requried | default(false) }}"
+    use_template_config: "{{ true if item.client_template is defined else false }}"
+    use_template_mappers: "{{ true if item.client_template is defined else false }}"
+    use_template_scope: "{{ true if item.client_template is defined else false }}"
+    web_origins: "{{ item.web_origins | default(omit) }}"
+
+    state: present
+
+    # OIDC Client Params
+    authorization_services_enabled: "{{ item.authorization_services_enabled | default(false) }}"
+    direct_access_grants_enabled: "{{ item.direct_access_grants_enabled | default(false) }}"
+    implicit_flow_enabled: "{{ item.implicit_flow_enabled | default(false) }}"
+    standard_flow_enabled: "{{ item.standard_flow_enabled | default(false) }}"
+
+  when: realm_clients is defined and item.protocol == 'openid-connect'
+  with_items: "{{ realm_clients }}"
+
+#- name: Manage SAML Clients
+#  community.general.keycloak_client:
+#    # Auth Params
+#    auth_username: "{{ auth_username }}"
+#    auth_password: "{{ auth_password }}"
+#    auth_realm: "{{ auth_realm | default('master') }}"
+#    auth_keycloak_url: "{{ auth_keycloak_url }}"
+#    validate_certs: "{{ validate_certs }}"
+#
+#    # Client Params
+#    consent_required: "{{ item.consent_required | default(false) }}"
+#    enabled: "{{ item.enabled | default(true) }}"
+#    protocol: "{{ item.protocol }}"
+#    state: present
+#
+#    # SAML Client Params
+#
+#  when: item.protocol == 'saml'
+#  with_items: "{{ realm_clients }}"
+#
+#- name: Manage Docker-V2 Clients
+#  community.general.keycloak_client:
+#    # Auth Params
+#    auth_username: "{{ auth_username }}"
+#    auth_password: "{{ auth_password }}"
+#    auth_realm: "{{ auth_realm | default('master') }}"
+#    auth_keycloak_url: "{{ auth_keycloak_url }}"
+#    validate_certs: "{{ validate_certs }}"
+#
+#    # Client Params
+#    consent_required: "{{ item.consent_required | default(false) }}"
+#    enabled: "{{ item.enabled | default(true) }}"
+#    protocol: "{{ item.protocol }}"
+#    state: present
+#
+#    # Docker-V2 Client Params
+#
+#  when: item.protocol == 'docker-v2'
+#  with_items: "{{ realm_clients }}"
+
+
+
+# args omitted which need reviewing:
+# - id
+# - node_re_registration_timeout
+# - not_before
+# - registered_nodes
+# - registration_access_token
+#
+
+# args omitted on purpose:
+# - secret

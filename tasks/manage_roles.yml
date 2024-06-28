@@ -1,0 +1,22 @@
+---
+- name: Manage Roles
+  community.general.keycloak_role:
+    # Auth Params
+    auth_username: "{{ auth_username }}"
+    auth_password: "{{ auth_password }}"
+    auth_realm: "{{ auth_realm | default('master') }}"
+    auth_keycloak_url: "{{ auth_keycloak_url }}"
+    validate_certs: "{{ validate_certs }}"
+
+    # Role Params
+    realm: "{{ realm }}"
+    name: "{{ item.name }}"
+    description: "{{ item.description | default(omit) }}"
+    attributes: "{{ item.attributes | default(omit) }}"
+    client_id: "{{ item.client_id | default(omit) }}"
+    composite: "{{ item.composite | default(false) }}"
+    composites: "{{ item.composites | default(omit) }}"
+    state: present
+
+  with_items: "{{ realm_roles }}"
+  when: realm_roles is defined
