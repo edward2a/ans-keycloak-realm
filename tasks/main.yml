@@ -1,9 +1,30 @@
 ---
 - ansible.builtin.include_tasks:
     file: realm.yml
+  tags:
+  - realm
+
+- ansible.builtin.include_tasks:
+    file: manage_groups.yml
+  tags:
+  - groups
+  - users-and-groups
 
 - ansible.builtin.include_tasks:
     file: manage_users.yml
+  tags:
+  - users
+  - users-and-groups
+
+- ansible.builtin.include_tasks:
+    file: manage_roles.yml
+  tags:
+  - roles
+  - roles-and-clients
 
 - ansible.builtin.include_tasks:
     file: manage_clients.yml
+  tags:
+  - clients
+  - roles-and-clients
+
