@@ -1,0 +1,19 @@
+---
+- name: Manage Groups
+  community.general.keycloak_group:
+    # Auth Params
+    auth_username: "{{ auth_username }}"
+    auth_password: "{{ auth_password }}"
+    auth_realm: "{{ auth_realm | default('master') }}"
+    auth_keycloak_url: "{{ auth_keycloak_url }}"
+    validate_certs: "{{ validate_certs }}"
+
+    # Group Params
+    realm: "{{ realm }}"
+    name: "{{ item.key }}"
+    attributes: "{{ item.attributes | default(omit) }}"
+    parents: "{{ items.parents | default(omit) }}"
+    state: present
+
+  with_dict: "{{ realm_groups | default({}) }}"
+  when: realm_groups is defined

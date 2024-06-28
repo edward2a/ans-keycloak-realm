@@ -1,0 +1,23 @@
+---
+- name: Manage Users
+  community.general.keycloak_user:
+    # Auth Params
+    auth_username: "{{ auth_username }}"
+    auth_password: "{{ auth_password }}"
+    auth_realm: "{{ auth_realm | default('master') }}"
+    auth_keycloak_url: "{{ auth_keycloak_url }}"
+    validate_certs: "{{ validate_certs }}"
+
+    # User Params
+    realm: "{{ realm }}"
+    username: "{{ item.username }}"
+    enabled: "{{ item.enabled | default(true) }}"
+    firstName: "{{ item.firstName }}"
+    lastName: "{{ item.lastName }}"
+    email: "{{ item.email }}"
+    attributes: "{{ item.attributes | default(omit) }}"
+    groups: "{{ item.groups }}"
+    state: present
+
+  with_items: "{{ realm_users | default([]) }}"
+  when: realm_users is defined
